@@ -13,5 +13,6 @@ CREATE TABLE comentario_anime (
                                  texto VARCHAR(1000),
                                  anime_id INT,
                                  data_criacao TIMESTAMP,
+                                 ativo boolean,
                                  CONSTRAINT fk_anime FOREIGN KEY (anime_id) REFERENCES anime(mal_id)
 );

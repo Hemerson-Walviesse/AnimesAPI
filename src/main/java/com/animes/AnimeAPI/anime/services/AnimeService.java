@@ -2,8 +2,11 @@ package com.animes.AnimeAPI.anime.services;
 import com.animes.AnimeAPI.anime.DTOs.AnimeDTO;
 import com.animes.AnimeAPI.anime.DTOs.WrapperListDTO;
 import com.animes.AnimeAPI.anime.client.AnimeClient;
+import com.animes.AnimeAPI.anime.entity.AnimeComentarioEntity;
 import com.animes.AnimeAPI.anime.entity.AnimeEntity;
+import com.animes.AnimeAPI.anime.repository.AnimeComentarioRepository;
 import com.animes.AnimeAPI.anime.repository.AnimeRepository;
+import com.animes.AnimeAPI.comuns.entity.ComentarioEntity;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,12 +25,14 @@ public class AnimeService {
 
     @Autowired
     AnimeRepository animeRepository;
+    @Autowired
+    AnimeComentarioRepository animeComentarioRepository;
 
     public AnimeEntity salvarAnimeSeNaoExistir(AnimeDTO dto){
         return animeRepository.findById(dto.getMal_id())
                 .orElseGet(() -> {
                     AnimeEntity anime = new AnimeEntity();
-                    anime.setMal_id(dto.getMal_id());
+                    anime.setMalId(dto.getMal_id());
                     anime.setTitle(dto.getTitle());
                     anime.setEpisodes(dto.getEpisodes());
                     anime.setScore(dto.getScore() != null ? dto.getScore().doubleValue() : null);
@@ -69,5 +74,12 @@ public class AnimeService {
         }catch (Exception e){
             throw new RuntimeException("Erro ao processar JSON: " + e.getMessage(), e);
         }
+        }
+
+        public ComentarioEntity excluirComentario(AnimeComentarioEntity comentario) {
+
+        comentario.setAtivo(false);
+        return animeComentarioRepository.save(comentario);
+
         }
 }

@@ -1,5 +1,6 @@
 package com.animes.AnimeAPI.anime.DTOs;
 
+import com.animes.AnimeAPI.anime.entity.AnimeComentarioEntity;
 import com.animes.AnimeAPI.anime.entity.AnimeEntity;
 import com.animes.AnimeAPI.manga.DTOs.MangaDTO;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -19,7 +20,7 @@ public class AnimeDTO extends DTOsComuns {
     private Integer episodes;
 
     public AnimeDTO(AnimeEntity anime) {
-        this.setMal_id(anime.getMal_id());
+        this.setMal_id(anime.getMalId());
         this.setTitle(anime.getTitle());
         DTOsComuns.ImageJpg dtoImageJpg = new DTOsComuns.ImageJpg(anime.getImages().getJpg().getImage_url());
         DTOsComuns.ImagesWapper dtoImages = new DTOsComuns.ImagesWapper(dtoImageJpg);

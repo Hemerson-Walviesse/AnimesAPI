@@ -1,5 +1,6 @@
 package com.animes.AnimeAPI.anime.controller;
 import com.animes.AnimeAPI.anime.DTOs.AnimeDTO;
+import com.animes.AnimeAPI.anime.DTOs.AnimesComentariosDTO;
 import com.animes.AnimeAPI.anime.DTOs.WrapperDTO;
 import com.animes.AnimeAPI.anime.DTOs.WrapperListDTO;
 import com.animes.AnimeAPI.anime.entity.AnimeEntity;
@@ -7,6 +8,8 @@ import com.animes.AnimeAPI.anime.entity.AnimeComentarioEntity;
 import com.animes.AnimeAPI.anime.repository.AnimeRepository;
 import com.animes.AnimeAPI.anime.repository.AnimeComentarioRepository;
 import com.animes.AnimeAPI.anime.services.AnimeService;
+import com.animes.AnimeAPI.comuns.entity.ComentarioDTO;
+import com.animes.AnimeAPI.comuns.entity.ComentarioEntity;
 import com.animes.AnimeAPI.comuns.services.ServiceComum;
 import com.animes.AnimeAPI.manga.DTOs.MangaDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -81,7 +84,10 @@ public class AnimeController {
                 WrapperDTO wrapper = animeService.getAnimeByIdTratado("/" + id, WrapperDTO.class);
                 AnimeEntity animeSalvo = animeService.salvarAnimeSeNaoExistir(wrapper.getData());
                 animeRepository.save(animeSalvo);
-                AnimeDTO response = new AnimeDTO(animeSalvo);
+                List<ComentarioDTO> comentarios = comentarioRepository.findByAnimeMalIdAndAtivo(animeSalvo.getMalId(), true);
+
+                // Cria resposta com anime e comentários
+                AnimesComentariosDTO response = new AnimesComentariosDTO(new AnimeDTO(animeSalvo), comentarios);
                 return ResponseEntity.ok(response);
 
             }else{
@@ -118,12 +124,29 @@ public class AnimeController {
                 comentarioRepository.save(comentario);
                 return ResponseEntity.status(HttpStatus.CREATED).body(comentario);
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Manga com ID " + id + " não encontrado.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Anime com ID " + id + " não encontrado.");
             }
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Erro ao adicionar comentário: " + e.getMessage());
         }
+    }
+
+    @DeleteMapping("/anime/{animeId}/comentarios/{comentarioId}")
+    public ResponseEntity<?> deletaComentario(@PathVariable Integer animeId, @PathVariable Integer comentarioId) {
+        Optional<AnimeEntity> anime = animeRepository.findById(animeId);
+        if (anime.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Optional<AnimeComentarioEntity> comentario = comentarioRepository.findById(comentarioId);
+        if (comentario.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        animeService.excluirComentario(comentario.get());
+
+        return ResponseEntity.ok().build();
     }
 }
 

@@ -19,7 +19,9 @@ import java.util.List;
 public class AnimeEntity{
 
     @Id
-    private Integer mal_id;
+
+    @Column(name = "mal_id") // mantém o nome da coluna no BD
+    private Integer malId;
     private String title;
     private String synopsis;
     private Integer episodes;
@@ -27,6 +29,10 @@ public class AnimeEntity{
     private Double score;
     @Embedded
     private ImagesWapper images;
+
+    public Integer getMalId() {
+        return malId;
+    }
 
 
     @Getter

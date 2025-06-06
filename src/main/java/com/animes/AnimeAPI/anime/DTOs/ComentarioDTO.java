@@ -1,4 +1,5 @@
 package com.animes.AnimeAPI.comuns.entity;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,12 +13,10 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@MappedSuperclass
-public class ComentarioEntity {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class ComentarioDTO {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Schema(description = "Texto do comentário")
+    private Integer id;
     private String texto;
     private boolean ativo = true;
 

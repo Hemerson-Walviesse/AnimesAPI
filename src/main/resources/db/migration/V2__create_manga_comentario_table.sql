@@ -14,5 +14,6 @@ CREATE TABLE comentario_manga (
                             texto VARCHAR(1000),
                             manga_id INT,
                             data_criacao TIMESTAMP,
+                            ativo boolean,
                             CONSTRAINT fk_manga FOREIGN KEY (manga_id) REFERENCES manga(mal_id)
 );
