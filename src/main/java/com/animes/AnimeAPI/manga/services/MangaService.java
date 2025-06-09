@@ -1,9 +1,12 @@
 package com.animes.AnimeAPI.manga.services;
 
+import com.animes.AnimeAPI.comuns.entity.ComentarioEntity;
 import com.animes.AnimeAPI.manga.DTOs.MangaDTO;
 import com.animes.AnimeAPI.manga.DTOs.WrapperListDTO;
 import com.animes.AnimeAPI.manga.client.MangaClient;
+import com.animes.AnimeAPI.manga.entity.MangaComentarioEntity;
 import com.animes.AnimeAPI.manga.entity.MangaEntity;
+import com.animes.AnimeAPI.manga.repository.MangaComentarioRepository;
 import com.animes.AnimeAPI.manga.repository.MangaRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -22,6 +25,8 @@ public class MangaService {
 
     @Autowired
     MangaRepository mangaRepository;
+    @Autowired
+    private MangaComentarioRepository mangaComentarioRepository;
 
     public <T> T getMangaByIdTratado(String endpoint, Class<T> clazz) throws JsonProcessingException {
         String jsonResponse = mangaClient.chamarApiExternamente(endpoint);
@@ -68,4 +73,8 @@ public class MangaService {
         }
     }
 
+    public ComentarioEntity excluirComentario(MangaComentarioEntity mangaComentario) {
+        mangaComentario.setAtivo(false);
+        return mangaComentarioRepository.save(mangaComentario);
+    }
 }

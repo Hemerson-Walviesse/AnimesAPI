@@ -8,10 +8,8 @@ import com.animes.AnimeAPI.anime.entity.AnimeComentarioEntity;
 import com.animes.AnimeAPI.anime.repository.AnimeRepository;
 import com.animes.AnimeAPI.anime.repository.AnimeComentarioRepository;
 import com.animes.AnimeAPI.anime.services.AnimeService;
-import com.animes.AnimeAPI.comuns.entity.ComentarioDTO;
-import com.animes.AnimeAPI.comuns.entity.ComentarioEntity;
+import com.animes.AnimeAPI.comuns.DTOs.ComentarioDTO;
 import com.animes.AnimeAPI.comuns.services.ServiceComum;
-import com.animes.AnimeAPI.manga.DTOs.MangaDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +43,8 @@ public class AnimeController {
          WrapperDTO wrapper = animeService.getAnimeByIdTratado("/" + id, WrapperDTO.class);
          System.out.println(wrapper);
          AnimeEntity anime = animeService.salvarAnimeSeNaoExistir(wrapper.getData());
-            AnimeDTO resposta = new AnimeDTO(anime);
+         List<ComentarioDTO> comentarios = comentarioRepository.buscarComentariosPorAnime(anime.getMalId());
+         AnimesComentariosDTO resposta = new AnimesComentariosDTO(new AnimeDTO(anime), comentarios);
             return ResponseEntity.ok(resposta);
         }catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -84,11 +83,8 @@ public class AnimeController {
                 WrapperDTO wrapper = animeService.getAnimeByIdTratado("/" + id, WrapperDTO.class);
                 AnimeEntity animeSalvo = animeService.salvarAnimeSeNaoExistir(wrapper.getData());
                 animeRepository.save(animeSalvo);
-                List<ComentarioDTO> comentarios = comentarioRepository.findByAnimeMalIdAndAtivo(animeSalvo.getMalId(), true);
 
-                // Cria resposta com anime e comentários
-                AnimesComentariosDTO response = new AnimesComentariosDTO(new AnimeDTO(animeSalvo), comentarios);
-                return ResponseEntity.ok(response);
+                return ResponseEntity.ok(animeSalvo);
 
             }else{
                 String endpoint = serviceComum.montarEndpoint(name, page);

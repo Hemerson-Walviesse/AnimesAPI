@@ -1,7 +1,8 @@
 package com.animes.AnimeAPI.manga.controller;
-
+import com.animes.AnimeAPI.comuns.DTOs.ComentarioDTO;
 import com.animes.AnimeAPI.comuns.services.ServiceComum;
 import com.animes.AnimeAPI.manga.DTOs.MangaDTO;
+import com.animes.AnimeAPI.manga.DTOs.MangasComentarioDTO;
 import com.animes.AnimeAPI.manga.DTOs.WrapperDTO;
 import com.animes.AnimeAPI.manga.DTOs.WrapperListDTO;
 import com.animes.AnimeAPI.manga.entity.MangaComentarioEntity;
@@ -40,8 +41,10 @@ public class MangaController {
         try {
             WrapperDTO wrapperDTO = mangaService.getMangaByIdTratado("/" + id, WrapperDTO.class);
             MangaEntity manga = mangaService.salvarMangaSeNaoExiste(wrapperDTO.getData());
-            MangaDTO response = new MangaDTO(manga);
-            return ResponseEntity.ok(response);
+            List<ComentarioDTO> comentarios = comentarioRepository.buscarComentariosPorManga(manga.getMal_id());
+            MangasComentarioDTO resposta = new MangasComentarioDTO(new MangaDTO(manga), comentarios);
+
+            return ResponseEntity.ok(resposta);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
@@ -118,6 +121,21 @@ public class MangaController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Erro ao adicionar comentário: " + e.getMessage());
         }
+    }
+
+    @DeleteMapping("/manga/{mangaId}/comentarios/{comentarioId}")
+    public ResponseEntity<?> deletarcomentario(@PathVariable Integer mangaId, @PathVariable Long comentarioId) {
+        Optional<MangaEntity> manga = mangaRepository.findById(mangaId);
+        if (manga.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        Optional<MangaComentarioEntity> comentario = comentarioRepository.findById(comentarioId);
+        if (comentario.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        mangaService.excluirComentario(comentario.get());
+        return ResponseEntity.ok().build();
     }
 
 

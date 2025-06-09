@@ -1,11 +1,13 @@
 package com.animes.AnimeAPI.comuns.DTOs;
 
-import com.animes.AnimeAPI.anime.entity.AnimeEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -38,5 +40,25 @@ public abstract class DTOsComuns {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class ImageJpg {
         private String image_url;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class ComentarioDTO {
+
+        private Integer id;
+        private String texto;
+        private boolean ativo = true;
+
+        private LocalDateTime dataCriacao;
+
+        public ComentarioDTO(Integer id, String texto, boolean ativo, LocalDateTime dataCriacao) {
+            this.id = id;
+            this.texto = texto;
+            this.ativo = ativo;
+            this.dataCriacao = dataCriacao;
+        }
     }
 }

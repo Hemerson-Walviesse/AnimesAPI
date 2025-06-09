@@ -58,7 +58,7 @@ public class AnimeEntity{
 
     @OneToMany(mappedBy = "anime", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference
-    private List<AnimeComentarioEntity> comentarios = new ArrayList<>();
+    private List<AnimeComentarioEntity> comentarios;
 
 
 }

@@ -1,4 +1,4 @@
-package com.animes.AnimeAPI.anime.DTOs;
+package com.animes.AnimeAPI.manga.DTOs;
 
 import com.animes.AnimeAPI.comuns.DTOs.ComentarioDTO;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -14,9 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AnimesComentariosDTO {
-    private AnimeDTO anime;
+public class MangasComentarioDTO {
+    private MangaDTO manga;
     private List<ComentarioDTO> comentarios;
-
-
 }

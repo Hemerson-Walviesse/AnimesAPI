@@ -14,7 +14,7 @@ import lombok.Setter;
 @Table(name = "comentario_manga")
 public class MangaComentarioEntity extends com.animes.AnimeAPI.comuns.entity.ComentarioEntity {
     @ManyToOne
-    @JoinColumn(name = "manga_id")
+    @JoinColumn(name = "manga_id", referencedColumnName = "mal_id")
     @JsonBackReference
     private MangaEntity manga;
 }
