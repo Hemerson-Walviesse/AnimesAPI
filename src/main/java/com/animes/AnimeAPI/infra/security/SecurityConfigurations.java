@@ -38,6 +38,8 @@ public class SecurityConfigurations {
                                          "/swagger-ui.html").permitAll()
                         .requestMatchers(HttpMethod.POST, "/anime/{id}/comentarios").hasRole("USER")
                         .requestMatchers(HttpMethod.DELETE, "/anime/{animeId}/comentarios/{comentarioId}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/manga/{id}/comentarios").hasRole("USER")
+                        .requestMatchers(HttpMethod.DELETE, "/anime/{mangaId}/comentarios/{comentarioId}").hasRole("ADMIN")
                         .requestMatchers("/h2-console/**").permitAll()
                         .anyRequest().authenticated()
                 )
