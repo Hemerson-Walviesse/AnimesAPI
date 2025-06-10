@@ -21,7 +21,8 @@ import java.util.List;
 public class MangaEntity{
 
     @Id
-    private Integer mal_id;
+    @Column(name = "mal_id")
+    private Integer malId;
     private Integer chapters;
     private String title;
     private String synopsis;

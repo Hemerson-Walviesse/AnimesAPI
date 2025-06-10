@@ -44,7 +44,7 @@ public class MangaService {
         return mangaRepository.findById(dto.getMal_id())
                 .orElseGet(()-> {
                     MangaEntity manga = new MangaEntity();
-                    manga.setMal_id(dto.getMal_id());
+                    manga.setMalId(dto.getMal_id());
                     manga.setTitle(dto.getTitle());
                     manga.setChapters(dto.getChapters());
                     manga.setScore(dto.getScore() != null ? dto.getScore().doubleValue(): null);

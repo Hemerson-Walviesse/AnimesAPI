@@ -41,7 +41,7 @@ public class MangaController {
         try {
             WrapperDTO wrapperDTO = mangaService.getMangaByIdTratado("/" + id, WrapperDTO.class);
             MangaEntity manga = mangaService.salvarMangaSeNaoExiste(wrapperDTO.getData());
-            List<ComentarioDTO> comentarios = comentarioRepository.buscarComentariosPorManga(manga.getMal_id());
+            List<ComentarioDTO> comentarios = comentarioRepository.buscarComentariosPorManga(manga.getMalId());
             MangasComentarioDTO resposta = new MangasComentarioDTO(new MangaDTO(manga), comentarios);
 
             return ResponseEntity.ok(resposta);

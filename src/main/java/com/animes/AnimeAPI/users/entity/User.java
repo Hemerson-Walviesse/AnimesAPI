@@ -3,15 +3,17 @@ package com.animes.AnimeAPI.users.entity;
 import com.animes.AnimeAPI.users.roles.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 @Table(name = "users")
-@Entity(name = "users")
+@Entity(name = "user")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,8 +22,10 @@ import java.util.List;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "id", updatable = false, nullable = false)
+    private UUID id;
     private String login;
     private String password;
     @Enumerated(EnumType.STRING)

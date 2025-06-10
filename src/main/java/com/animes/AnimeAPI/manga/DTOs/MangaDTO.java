@@ -43,7 +43,7 @@ public class MangaDTO {
     }
 
     public MangaDTO(MangaEntity manga) {
-        this.setMal_id(manga.getMal_id());
+        this.setMal_id(manga.getMalId());
         this.setTitle(manga.getTitle());
         MangaDTO.ImageJpg dtoImageJpg = new MangaDTO.ImageJpg(manga.getImages().getJpg().getImage_url());
         MangaDTO.ImagensWapper dtoImages = new MangaDTO.ImagensWapper(dtoImageJpg);

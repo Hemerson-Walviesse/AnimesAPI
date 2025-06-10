@@ -13,6 +13,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -39,10 +44,11 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.POST, "/anime/{id}/comentarios").hasRole("USER")
                         .requestMatchers(HttpMethod.DELETE, "/anime/{animeId}/comentarios/{comentarioId}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/manga/{id}/comentarios").hasRole("USER")
-                        .requestMatchers(HttpMethod.DELETE, "/anime/{mangaId}/comentarios/{comentarioId}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/manga/{mangaId}/comentarios/{comentarioId}").hasRole("ADMIN")
                         .requestMatchers("/h2-console/**").permitAll()
                         .anyRequest().authenticated()
                 )
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // <-- Adicionado para CORS
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
@@ -57,4 +63,23 @@ public class SecurityConfigurations {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        // **IMPORTANTE**: Use a URL exata do seu frontend.
+        // Se a porta 5500 for fixa:
+        configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5500"));
+        // Se a porta for dinâmica ou você quiser localhost também:
+        // configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5500", "http://localhost:5500"));
+
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("*")); // Permita todos os cabeçalhos
+        configuration.setAllowCredentials(true); // Necessário se você usa cookies, cabeçalhos de autorização etc.
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // Aplica a todos os endpoints
+        return source;
+    }
+
 }
